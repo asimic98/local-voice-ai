@@ -1,0 +1,5 @@
+venv/
+inference/llama/models/
+.env
+.env.*
+!.env.example
