@@ -10,7 +10,7 @@ def _llm() -> llm.LLM:
 
 @pytest.mark.asyncio
 async def test_offers_assistance() -> None:
-    """Evaluation of the agent's friendly nature."""
+    """Evaluation of the agent's intro/persona."""
     async with (
         _llm() as llm,
         AgentSession(llm=llm) as session,
@@ -20,18 +20,18 @@ async def test_offers_assistance() -> None:
         # Run an agent turn following the user's greeting
         result = await session.run(user_input="Hello")
 
-        # Evaluate the agent's response for friendliness
+        # Evaluate the agent's response for the expected introduction
         await (
             result.expect.next_event()
             .is_message(role="assistant")
             .judge(
                 llm,
                 intent="""
-                Greets the user in a friendly manner.
+                Introduces itself as Tina from Mileva LLC and asks if it's an okay time to talk.
 
-                Optional context that may or may not be included:
-                - Offer of assistance with any request the user may have
-                - Other small talk or chit chat is acceptable, so long as it is friendly and not too intrusive
+                The response should:
+                - Be warm and professional
+                - Include a question like "Did I catch you at an okay time?"
                 """,
             )
         )
